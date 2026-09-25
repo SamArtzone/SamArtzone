@@ -1,0 +1,936 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SamArtzone — Brand & Advertising Agency &amp; Art Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- EDIT HERE: favicon uses the same logo file as the header. Update this path if you rename/move your logo file.
+     To change favicon size, edit the "sizes" value below (common sizes: 16x16, 32x32, 48x48, 64x64). -->
+<link rel="icon" type="image/png" href="logo-favicon.png" sizes="16x16">
+<style>
+  :root{
+    --black:#0b0b0b;
+    --white:#f7f7f4;
+    --gray-1:#b6b6b0;
+    --gray-2:#6b6b66;
+    --line: rgba(247,247,244,0.14);
+    --line-strong: rgba(247,247,244,0.32);
+    --ease: cubic-bezier(.16,.8,.24,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:'Space Grotesk',sans-serif;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  @media (max-width:900px){ body{cursor:auto;} }
+
+  ::selection{ background:var(--white); color:var(--black); }
+
+  /* ---------- grain ---------- */
+  #grain{
+    position:fixed; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:9998; opacity:.05; mix-blend-mode:overlay;
+  }
+
+  /* ---------- custom cursor ---------- */
+  .cursor{
+    position:fixed; top:0; left:0; width:10px; height:10px;
+    border-radius:50%; background:var(--white);
+    pointer-events:none; z-index:9999; mix-blend-mode:difference;
+    transform:translate(-50%,-50%);
+    transition:width .25s var(--ease), height .25s var(--ease);
+  }
+  .cursor.grow{ width:64px; height:64px; }
+  @media (max-width:900px){ .cursor{display:none;} }
+
+  /* ---------- cursor ring (outline trailing the dot) ---------- */
+  .cursor-ring{
+    position:fixed; top:0; left:0; width:34px; height:34px;
+    border-radius:50%; border:1px solid var(--white); background:transparent;
+    pointer-events:none; z-index:9999; mix-blend-mode:difference;
+    transform:translate(-50%,-50%);
+    transition:width .25s var(--ease), height .25s var(--ease), opacity .25s var(--ease);
+  }
+  .cursor-ring.grow{ width:80px; height:80px; opacity:.5; }
+  @media (max-width:900px){ .cursor-ring{display:none;} }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  section{ position:relative; }
+
+  .wrap{ padding:0 6vw; }
+  .eyebrow{
+    font-size:12px; letter-spacing:.28em; text-transform:uppercase;
+    color:var(--gray-1); font-weight:500;
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; left:0; width:100%; z-index:500;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:28px 6vw; mix-blend-mode:difference;
+  }
+  .logo{ font-family:'Anton',sans-serif; font-size:20px; letter-spacing:.04em; display:flex; align-items:center; }
+  /* EDIT HERE: change height to resize your logo image */
+  .logo img{ height: 70px; width:auto; display:block; filter: invert(1); }
+  nav ul{ display:flex; gap:40px; }
+  nav a{ font-size:13px; letter-spacing:.14em; text-transform:uppercase; position:relative; }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px;
+    background:var(--white); transition:width .3s var(--ease);
+  }
+  nav a:hover::after{ width:100%; }
+  .status{ display:flex; align-items:center; gap:8px; font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+  .dot{ width:7px; height:7px; border-radius:50%; background:var(--white); animation:pulse 1.8s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  .nav-links, .status{ display:flex; }
+  @media (max-width:760px){ .nav-links{ display:none; } }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh; display:flex; flex-direction:column;
+    justify-content:center; padding:120px 6vw 60px;
+    position:relative;
+  }
+  .hero-eyebrow{ display:flex; align-items:center; gap:16px; margin-bottom:18px; }
+  .hero-eyebrow span{ font-size:13px; letter-spacing:.24em; text-transform:uppercase; color:var(--gray-1); }
+  .hero-eyebrow .rule{ width:48px; height:1px; background:var(--line-strong); }
+
+  h1.hero-title{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    font-size:clamp(58px, 12vw, 168px);
+    line-height:.86;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    position:relative;
+    z-index:2;
+  }
+
+  /* ---------- hero gif (full screen fit) ---------- */
+  .hero-gif{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    z-index:1; pointer-events:none;
+  }
+  h1.hero-title .line{ display:block; overflow:hidden; }
+  h1.hero-title .line span{ display:inline-block; transform:translateY(110%); animation:rise 1s var(--ease) forwards; }
+  h1.hero-title .line:nth-child(2) span{ animation-delay:.08s; }
+  @keyframes rise{ to{ transform:translateY(0); } }
+
+  .hero-sub{
+    margin-top:32px; max-width:520px; font-size:16px; line-height:1.65; color:var(--gray-1);
+    font-weight:300;
+  }
+  .hero-foot{
+    margin-top:64px; display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:24px;
+  }
+  .scroll-cue{
+    display:flex; align-items:center; gap:10px; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--gray-1);
+  }
+  .scroll-cue .bar{ width:1px; height:34px; background:var(--line-strong); position:relative; overflow:hidden; }
+  .scroll-cue .bar::after{
+    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background:var(--white);
+    animation:scrolldown 1.6s ease-in-out infinite;
+  }
+  @keyframes scrolldown{ 0%{top:-100%;} 60%{top:100%;} 100%{top:100%;} }
+
+  /* ---------- marquee ---------- */
+  .marquee-band{
+    background:var(--white); color:var(--black);
+    overflow:hidden; white-space:nowrap; padding:22px 0;
+    border-top:1px solid var(--black); border-bottom:1px solid var(--black);
+    transform:rotate(-1.1deg) scale(1.02);
+    margin:2px 0;
+  }
+  .marquee-track{ display:inline-block; animation:scroll-left 26s linear infinite; }
+  .marquee-band.rev .marquee-track{ animation:scroll-right 26s linear infinite; }
+  .marquee-track span{
+    font-family:'Anton',sans-serif; font-size:clamp(28px,4vw,44px);
+    text-transform:uppercase; letter-spacing:.01em; padding:0 28px; display:inline-block;
+  }
+  .marquee-track span::after{ content:'—'; margin-left:28px; color:var(--gray-2); }
+  @keyframes scroll-left{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @keyframes scroll-right{ from{transform:translateX(-50%);} to{transform:translateX(0);} }
+
+  /* ---------- section heading ---------- */
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding:120px 6vw 56px; gap:24px; flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:'Anton',sans-serif; font-size:clamp(36px,6vw,72px);
+    text-transform:uppercase; line-height:.9;
+  }
+  .section-head p{ max-width:340px; color:var(--gray-1); font-size:14px; line-height:1.6; font-weight:300; }
+
+  /* ---------- work list ---------- */
+  .work-list{ padding:0 6vw 60px; border-top:1px solid var(--line); }
+  .work-row{
+    display:grid; grid-template-columns:70px 1fr auto auto;
+    align-items:center; gap:28px;
+    padding:38px 0; border-bottom:1px solid var(--line);
+    cursor:pointer; position:relative;
+    transition:padding-left .45s var(--ease), opacity .3s;
+  }
+  .work-row:hover{ padding-left:22px; }
+  .work-list.hovering .work-row:not(:hover){ opacity:.32; }
+  .work-index{ font-size:13px; color:var(--gray-2); font-weight:500; }
+  .work-title{
+    font-family:'Anton',sans-serif; font-size:clamp(28px,4.2vw,58px);
+    text-transform:uppercase; line-height:1;
+  }
+  .work-cat{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-1); text-align:right; }
+  .work-year{ font-size:13px; color:var(--gray-2); }
+
+  .preview{
+    position:fixed; top:0; left:0; width:280px; height:190px;
+    pointer-events:none; z-index:400; overflow:hidden;
+    opacity:0; transform:translate(-50%,-50%) scale(.9);
+    transition:opacity .35s var(--ease), transform .35s var(--ease);
+    border:1px solid var(--line-strong);
+  }
+  .preview.active{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  .preview img,.preview .swatch{ width:100%; height:100%; object-fit:cover; display:block; }
+  @media (max-width:900px){ .preview{ display:none; } }
+
+  /* ---------- banner slideshow inside the hover box ----------
+     EDIT HERE: .preview.gallery sets the size of the hover box when a row has a slideshow.
+     Keep the ratio close to your banners (about 2.2 : 1) so little gets cropped.
+     Slide timing (SLIDE_HOLD / SLIDE_MOVE) is set in the <script> at the bottom of this file. */
+  .preview.gallery{ width:480px; height:210px; }
+  .preview.gallery .swatch{ display:none; }
+  /* EDIT HERE: the poster box is portrait (posters are tall). The name in [ ] is the gallery / folder name. */
+  .preview.gallery[data-gallery="poster"]{ width:280px; height:350px; }
+  /* the logo box is square (logo mockups are square) */
+  .preview.gallery[data-gallery="logo"]{ width:320px; height:320px; }
+  /* the infographic box is square too */
+  .preview.gallery[data-gallery="infographic"]{ width:320px; height:320px; }
+  /* the web-design box is landscape like a browser window; it shows the top of each page */
+  .preview.gallery[data-gallery="web-design"]{ width:480px; height:270px; }
+  /* the creative box is square */
+  .preview.gallery[data-gallery="creative"]{ width:320px; height:320px; }
+  .preview .preview-track{ position:absolute; inset:0; display:none; background:var(--black); }
+  .preview .preview-track.on{ display:block; }
+  .preview .slide{
+    position:absolute; inset:0; transform:translateX(100%);
+    transition:transform var(--slide-move, .7s) var(--ease);
+  }
+  .preview .slide.is-current{ transform:translateX(0); }
+  .preview .slide.is-leaving{ transform:translateX(-100%); }
+  .preview .slide.no-anim{ transition:none; }
+  .preview .slide img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  .work-row[data-gallery]:focus-visible{ outline:1px solid var(--white); outline-offset:6px; }
+
+  /* ---------- lightbox (click on a banner = full view) ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:9000;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(11,11,11,.97);
+    opacity:0; visibility:hidden;
+    transition:opacity .35s var(--ease), visibility 0s linear .35s;
+  }
+  .lightbox.open{ opacity:1; visibility:visible; transition:opacity .35s var(--ease); }
+  .lb-figure{ max-width:94vw; max-height:86vh; display:flex; }
+  .lb-img{
+    max-width:94vw; max-height:86vh; width:auto; height:auto; object-fit:contain; display:block;
+    border:1px solid var(--line-strong);
+    transform:scale(.97); transition:transform .45s var(--ease), opacity .2s;
+  }
+  .lightbox.open .lb-img{ transform:scale(1); }
+  .lb-img.swap{ opacity:0; }
+  /* scrolling view for very tall images (whole web pages): readable width, scroll inside the frame */
+  .lightbox.scroll .lb-figure{ display:block; overflow-y:auto; overflow-x:hidden; border:1px solid var(--line-strong); }
+  .lightbox.scroll .lb-img{ width:auto; max-width:min(calc(94vw - 10px), 1100px); max-height:none; height:auto; border:0; }
+  .lb-btn{
+    position:absolute; background:none; border:0; color:var(--white); cursor:inherit;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    padding:14px 18px;
+  }
+  .lb-btn:hover{ color:var(--gray-1); }
+  .lb-btn:focus-visible{ outline:1px solid var(--white); }
+  .lb-close{ top:22px; right:4vw; }
+  .lb-prev{ left:2vw; top:50%; transform:translateY(-50%); }
+  .lb-next{ right:2vw; top:50%; transform:translateY(-50%); }
+  .lb-count{ position:absolute; bottom:24px; left:50%; transform:translateX(-50%); font-size:12px; letter-spacing:.2em; color:var(--gray-1); }
+  @media (max-width:700px){
+    .lb-prev, .lb-next{ top:auto; bottom:10px; transform:none; }
+    .lb-prev{ left:4vw; } .lb-next{ right:4vw; }
+    .lb-count{ bottom:24px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .preview .slide, .lb-img, .lightbox{ transition:none; }
+  }
+
+  .work-row .grid-cols{ grid-column:1 / -1; }
+  @media (max-width:700px){
+    .work-row{ grid-template-columns:40px 1fr; row-gap:8px; }
+    .work-cat, .work-year{ grid-column:2; text-align:left; color:var(--gray-2); }
+  }
+
+  /* ---------- about ---------- */
+  .about{ padding:120px 6vw; display:grid; grid-template-columns:.9fr 1.1fr; gap:80px; border-top:1px solid var(--line); }
+  @media (max-width:860px){ .about{ grid-template-columns:1fr; gap:56px; } }
+  .about-visual{
+    aspect-ratio:4/5; position:relative; border:1px solid var(--line-strong);
+    background:
+      repeating-linear-gradient(115deg, transparent 0 18px, var(--line) 18px 19px),
+      radial-gradient(circle at 30% 20%, #2a2a2a, #0b0b0b 70%);
+    overflow:hidden;
+  }
+  .about-visual::before{
+    content:'SG'; position:absolute; bottom:24px; left:24px; z-index:2;
+    font-family:'Anton',sans-serif; font-size:15vw; line-height:.8; color:var(--white); opacity:.9;
+  }
+  .about-visual .ring{
+    position:absolute; top:20px; right:20px; width:90px; height:90px; border:1px solid var(--line-strong);
+    border-radius:50%; animation:spin 14s linear infinite; z-index:2;
+  }
+  /* EDIT HERE: this is your About photo. Swap "profile.jpg" for your own file name,
+     and adjust object-position (left-right% top-bottom%) or the scale value to reframe/zoom. */
+  .about-visual .about-photo{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:50% 22%;
+    transform:scale(1.18);
+    z-index:1;
+  }
+  .about-visual .ring::after{
+    content:'EST. 2022 • AGENCY •'; position:absolute; inset:0; border-radius:50%;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .about-copy h3{ font-family:'Anton',sans-serif; font-size:clamp(30px,4vw,46px); text-transform:uppercase; margin-bottom:24px; line-height:1.05; }
+  .about-copy p{ color:var(--gray-1); font-size:16px; line-height:1.75; font-weight:300; max-width:540px; }
+  .about-copy p + p{ margin-top:18px; }
+
+  .skills{ margin-top:44px; display:grid; grid-template-columns:repeat(2,1fr); gap:14px 40px; }
+  .skills li{
+    display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding:10px 0;
+    font-size:13px; letter-spacing:.08em; text-transform:uppercase;
+  }
+  .skills li span{ color:var(--gray-2); }
+  @media (max-width:520px){ .skills{ grid-template-columns:1fr; } }
+
+  /* ---------- clients ---------- */
+  .clients{ border-top:1px solid var(--line); padding:80px 6vw; }
+  .clients .eyebrow{ margin-bottom:36px; }
+  .client-grid{
+    display:grid; grid-template-columns:repeat(4,1fr);
+  }
+  .client-grid div{
+    background:var(--black); padding:34px 10px; text-align:center;
+    font-family:'Anton',sans-serif; font-size:clamp(16px,1.7vw,22px); text-transform:uppercase;
+    letter-spacing:.02em; color:var(--gray-1); transition:color .3s, background .3s;
+    border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  /* no outer edges: drop the right border on the last column, bottom border on the last row */
+  .client-grid div:nth-child(4n){ border-right:0; }
+  .client-grid div:nth-last-child(-n+4){ border-bottom:0; }
+  .client-grid div:hover{ color:var(--black); background:var(--white); }
+  @media (max-width:700px){
+    .client-grid{ grid-template-columns:repeat(2,1fr); }
+    .client-grid div{ border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .client-grid div:nth-child(4n){ border-right:1px solid var(--line); }
+    .client-grid div:nth-child(2n){ border-right:0; }
+    .client-grid div:nth-last-child(-n+4){ border-bottom:1px solid var(--line); }
+    .client-grid div:nth-last-child(-n+2){ border-bottom:0; }
+  }
+
+  /* ---------- contact ---------- */
+  .contact{
+    border-top:1px solid var(--line); padding:140px 6vw 100px;
+    display:flex; flex-direction:column; align-items:flex-start;
+  }
+  .contact h2{
+    font-family:'Anton',sans-serif; text-transform:uppercase; line-height:.86;
+    font-size:clamp(52px,11vw,148px);
+  }
+  .contact h2 a{ position:relative; }
+  .contact h2 a::after{
+    content:''; position:absolute; left:0; bottom:.06em; width:100%; height:2px; background:var(--white);
+    transform:scaleX(0); transform-origin:left; transition:transform .5s var(--ease);
+  }
+  .contact h2 a:hover::after{ transform:scaleX(1); }
+  .contact-meta{ margin-top:50px; display:flex; gap:64px; flex-wrap:wrap; }
+  .contact-meta div p:first-child{ font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--gray-2); margin-bottom:10px; }
+  .contact-meta div p a{ font-size:14px; }
+  .contact-meta ul{ display:flex; flex-direction:column; gap:8px; }
+
+  footer{
+    border-top:1px solid var(--line); padding:26px 6vw;
+    display:flex; justify-content:center; align-items:center; font-size:11px; letter-spacing:.1em; color:var(--gray-2);
+    flex-wrap:wrap; gap:16px;
+  }
+  /* EDIT HERE: footer social links row */
+  .footer-social{ display:flex; gap:22px; text-transform:uppercase; }
+  .footer-social a{ color:var(--gray-2); transition:color .25s var(--ease); }
+  .footer-social a:hover{ color:var(--white); }
+
+  ::-webkit-scrollbar{ width:8px; }
+  ::-webkit-scrollbar-track{ background:var(--black); }
+  ::-webkit-scrollbar-thumb{ background:var(--gray-2); }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<canvas id="grain"></canvas>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<header>
+  <!-- EDIT HERE: replace "logo.png" with your logo file's name/path.
+       Put your logo image file in the same folder as this HTML file.
+       If you'd rather use a text logo, delete the <img> tag and put your text
+       between the <a> tags instead, e.g. <a href="#top" class="logo">MC/25</a> -->
+  <a href="#top" class="logo"><img src="logo-favicon.png" alt="Logo"></a>
+  <nav class="nav-links">
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <a href="https://wa.me/917289053244" target="_blank" rel="noopener noreferrer" class="status"><span class="dot"></span>Available for work</a>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-eyebrow"><div class="rule"></div><span>Graphic Designer — Art Director</span></div>
+  <!-- EDIT HERE: this used to be logo.gif (1.1MB). Converted to video (webm/mp4) at the same visual
+       quality — same animation, ~85-90% smaller file, and video is far more efficient for browsers to
+       decode than GIF. autoplay+muted+loop+playsinline makes it behave just like the old GIF did.
+       To change this animation later, replace logo.webm and logo.mp4 with new files of the same names. -->
+  <video class="hero-gif" autoplay muted loop playsinline preload="auto">
+    <source src="logo.mp4" type="video/mp4">
+  </video>
+  <p class="hero-sub">I build identities that photograph well in black and white — brand systems, packaging, and editorial design for labels that don't want to look like everyone else.</p>
+  <div class="hero-foot">
+    <div class="scroll-cue"><div class="bar"></div>Scroll</div>
+    <div class="eyebrow">Based in Delhi NCR — Working Worldwide</div>
+  </div>
+</section>
+
+<div class="marquee-band">
+  <div class="marquee-track">
+    <span>Brand Identity</span><span>UI Design</span><span>Packaging</span><span>Advertising Design</span><span>E-com Infographics</span><span>Motion</span>
+    <span>Brand Identity</span><span>UI Design</span><span>Packaging</span><span>Advertising Design</span><span>E-com Infographics</span><span>Motion</span>
+  </div>
+</div>
+
+<section id="work">
+  <div class="section-head reveal">
+    <h2>Selected<br>Work</h2>
+    <p>Six projects, Six problems. Hover a title to preview — click to enquire about the full case study.</p>
+  </div>
+
+  <!-- EDIT HERE: each .work-row below is one project.
+       To add a project: copy a whole <div class="work-row">...</div> block,
+       paste it, then change the index (01, 02...), title, category and year.
+       data-preview="p1" (p1-p5) controls the hover preview swatch pattern —
+       reuse p1-p5 in any order, or edit the "patterns" object in the <script>
+       near the bottom of this file to add new pattern keys. -->
+  <div class="work-list" id="workList">
+    <!-- data-gallery="banner" = this row shows a slideshow on hover and opens the full view on click.
+         The name must match the folder inside "images" (images/banner/) and the list in GALLERIES
+         (in the <script> at the bottom of this file). Poster works the same way with data-gallery="poster". -->
+    <div class="work-row" data-preview="p1" data-gallery="banner">
+      <span class="work-index">01</span>
+      <span class="work-title">Banner</span>
+      <span class="work-cat">Banner</span>
+      <span class="work-year">2026</span>
+    </div>
+    <div class="work-row" data-preview="p2" data-gallery="infographic">
+      <span class="work-index">02</span>
+      <span class="work-title">Infographic</span>
+      <span class="work-cat">Infographic</span>
+      <span class="work-year">2026</span>
+    </div>
+    <div class="work-row" data-preview="p3" data-gallery="logo">
+      <span class="work-index">03</span>
+      <span class="work-title">Logo</span>
+      <span class="work-cat">Logo</span>
+      <span class="work-year">2026</span>
+    </div>
+    <div class="work-row" data-preview="p4" data-gallery="web-design">
+      <span class="work-index">04</span>
+      <span class="work-title">UI Design</span>
+      <span class="work-cat">UI Design</span>
+      <span class="work-year">2026</span>
+    </div>
+    <div class="work-row" data-preview="p5" data-gallery="creative">
+      <span class="work-index">05</span>
+      <span class="work-title">Creative</span>
+      <span class="work-cat">Creative</span>
+      <span class="work-year">2026</span>
+    </div>
+    <div class="work-row" data-preview="p6" data-gallery="poster">
+      <span class="work-index">06</span>
+      <span class="work-title">Poster</span>
+      <span class="work-cat">Poster</span>
+      <span class="work-year">2026</span>
+    </div>
+  </div>
+</section>
+
+<div class="preview" id="preview"><div class="swatch" id="previewSwatch"></div></div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Banner viewer" aria-hidden="true">
+  <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Close">Close</button>
+  <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous banner">Prev</button>
+  <figure class="lb-figure"><img class="lb-img" id="lbImg" alt=""></figure>
+  <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next banner">Next</button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
+<div class="marquee-band rev">
+  <div class="marquee-track">
+    <span>Open For Work</span><span>Say Hello</span><span>Est. 2022</span><span>Delhi · Remote</span>
+    <span>Open For Work</span><span>Say Hello</span><span>Est. 2022</span><span>Delhi · Remote</span>
+  </div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-visual reveal">
+    <!-- EDIT HERE: to change this photo later, just replace both "profile.jpg" and "profile.webp"
+         with your new photo (same file names, same folder as this HTML file).
+         profile.webp loads first in browsers that support it (much smaller/faster);
+         profile.jpg is the fallback for the few that don't.
+         If you only have a new JPG and no WEBP, it's fine to leave profile.webp as-is removed/outdated —
+         the JPG will still show correctly, you'll just lose the extra speed boost until you add a matching WEBP. -->
+    <picture>
+      <source srcset="profile.webp" type="image/webp">
+      <img src="profile.webp" alt="Sumit" class="about-photo" loading="lazy">
+    </picture>
+    <div class="ring"></div>
+  </div>
+  <div class="about-copy reveal">
+    <div class="eyebrow" style="margin-bottom:18px;">About</div>
+    <h3>Design that holds its nerve.</h3>
+    <p>I'm Sumit — a graphic and Motion designer working across brand identity, packaging, web-banner's and Advertising Design. My practice is built on restraint: strip a system down to type, contrast, and rhythm, and it survives every medium it touches.</p>
+    <p>three years, seven plus brands, one recurring belief — the best identities don't need colour to be remembered. They need a point of view.</p>
+    <ul class="skills">
+      <li>Brand identity Design <span>01</span></li>
+      <li>Web Banner <span>02</span></li>
+      <li>Advertising Design <span>03</span></li>
+      <li>Packaging <span>04</span></li>
+      <li>E-com Infographics <span>05</span></li>
+      <li>Motion Design <span>06</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="clients">
+  <div class="eyebrow reveal">Trusted By</div>
+  <div class="client-grid reveal">
+    <div>Vsneek</div><div>Effora</div><div>Meme house</div><div>vivyra</div>
+    <div>Arborea</div><div>Igru Farms Honey</div><div>Erba</div><div>Artist Deeksha</div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="eyebrow" style="margin-bottom:24px;">Have a project in mind?</div>
+  <h2><a href="https://wa.me/917289053244" target="_blank" rel="noopener noreferrer">Let's Talk↗</a></h2>
+  <div class="contact-meta">
+    <div>
+      <p>Email</p>
+      <p><a href="mailto:SamArtzone01@gmail.com">SamArtzone01@Gmail.com</a></p>
+    </div>
+    <div>
+      <p>Social</p>
+      <!-- EDIT HERE: replace "#" with your real profile URLs (same links as footer) -->
+      <ul>
+        <li><a href="https://www.instagram.com/samartzone27/?igsh=MXJ4a2RodGFrMnlpdA%3D%3D" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="https://www.behance.net/19cb362d" target="_blank" rel="noopener noreferrer">Behance</a></li>
+        <li><a href="https://www.linkedin.com/in/sumit-gupta-854b33259?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="https://wa.me/917289053244" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <p>Agency</p>
+      <p style="color:var(--gray-1);">Delhi NCR, India<br>Working worldwide</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 SamArtzone</span>
+</footer>
+
+<script>
+  // custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  const isTouch = window.matchMedia('(max-width:900px)').matches;
+  if(!isTouch){
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+    window.addEventListener('mousemove', e=>{
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX+'px';
+      cursor.style.top = mouseY+'px';
+    });
+    // smooth trailing animation for the ring outline
+    (function animateRing(){
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorRing.style.left = ringX+'px';
+      cursorRing.style.top = ringY+'px';
+      requestAnimationFrame(animateRing);
+    })();
+    document.querySelectorAll('a, .work-row, .client-grid div, .lb-btn').forEach(el=>{
+      el.addEventListener('mouseenter', ()=>{ cursor.classList.add('grow'); cursorRing.classList.add('grow'); });
+      el.addEventListener('mouseleave', ()=>{ cursor.classList.remove('grow'); cursorRing.classList.remove('grow'); });
+    });
+  }
+
+  // grain canvas
+  const canvas = document.getElementById('grain');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function drawGrain(){
+    const w = canvas.width, h = canvas.height;
+    const imgData = ctx.createImageData(w,h);
+    const buffer = new Uint32Array(imgData.data.buffer);
+    for(let i=0;i<buffer.length;i++){
+      const v = (Math.random()*255)|0;
+      buffer[i] = (255<<24) | (v<<16) | (v<<8) | v;
+    }
+    ctx.putImageData(imgData,0,0);
+  }
+  let frame=0;
+  function loop(){ if(frame % 4 === 0) drawGrain(); frame++; requestAnimationFrame(loop); }
+  loop();
+
+  // project preview follow
+  const patterns = {
+    p1: 'repeating-linear-gradient(135deg,#1a1a1a 0 12px,#0b0b0b 12px 24px)',
+    p2: 'radial-gradient(circle at 30% 30%, #3a3a3a, #0b0b0b 70%)',
+    p3: 'repeating-linear-gradient(90deg,#0b0b0b 0 3px,#2c2c2c 3px 6px)',
+    p4: 'linear-gradient(160deg,#242424,#0b0b0b 60%)',
+    p5: 'repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 6px, #2a2a2a 6px 7px)'
+  };
+  const preview = document.getElementById('preview');
+  const swatch = document.getElementById('previewSwatch');
+  const workList = document.getElementById('workList');
+  const rows = document.querySelectorAll('.work-row');
+
+  // ---------- work galleries: hover = auto-sliding banners, click = full view ----------
+  // EDIT HERE: every kind of work has its own folder inside "images" (images/banner, images/poster, ...).
+  // To add a new banner/poster: save it there as .webp and add one line to that list below.
+  //   thumb = small image shown in the hover box (loads early, tiny file)
+  //   full  = big image shown on click (loads only when someone clicks)
+  //   alt   = short description for screen readers / SEO
+  // For a new row: make images/<name>/, add data-gallery="<name>" on that row in the HTML above and add a
+  // "<name>: [ ... ]" list here (plus a box size in the CSS if needed).
+  const SLIDE_HOLD = 2000;   // ms each banner stays before sliding to the next
+  const SLIDE_MOVE = 700;    // ms the slide itself takes
+  const GALLERIES = {
+    banner: [
+      { thumb:'images/banner/banner-1-thumb.webp', full:'images/banner/banner-1.webp', alt:'Tulsidas Ji Ki Katha banner with a Subscribe Today button' },
+      { thumb:'images/banner/banner-2-thumb.webp', full:'images/banner/banner-2.webp', alt:'Handbag campaign banner: models around a black SUV in a white room with open doors' },
+      { thumb:'images/banner/banner-3-thumb.webp', full:'images/banner/banner-3.webp', alt:'Vivyra Sticky Eyeliner banner: 24 hours of intense black' },
+      { thumb:'images/banner/banner-4-thumb.webp', full:'images/banner/banner-4.webp', alt:'Banner with six models in a blue room and papers flying around' },
+      { thumb:'images/banner/banner-5-thumb.webp', full:'images/banner/banner-5.webp', alt:'Vivyra Sticky Eyeliner banner: eyes that speak before you do' },
+      { thumb:'images/banner/banner-6-thumb.webp', full:'images/banner/banner-6.webp', alt:'Effora beauty wand banner: next-gen skincare starts here' },
+      { thumb:'images/banner/banner-7-thumb.webp', full:'images/banner/banner-7.webp', alt:'Rionto laptop bag banner: leak-proof life, model underwater' },
+      { thumb:'images/banner/banner-8-thumb.webp', full:'images/banner/banner-8.webp', alt:'Effora banner: USB rechargeable for on-the-go convenience' },
+      { thumb:'images/banner/banner-9-thumb.webp', full:'images/banner/banner-9.webp', alt:'Effora banner: say goodbye to impurities' },
+      { thumb:'images/banner/banner-10-thumb.webp', full:'images/banner/banner-10.webp', alt:'Collection banner with a model in a light blue shirt in a grey office' },
+      { thumb:'images/banner/banner-11-thumb.webp', full:'images/banner/banner-11.webp', alt:'The Unbothered Collection banner: 500 pieces only' },
+      { thumb:'images/banner/banner-12-thumb.webp', full:'images/banner/banner-12.webp', alt:'Modesto banner: flat 50% off on shoes and boots' },
+      { thumb:'images/banner/banner-13-thumb.webp', full:'images/banner/banner-13.webp', alt:'Banner with two models in a dark modern building' },
+      { thumb:'images/banner/banner-14-thumb.webp', full:'images/banner/banner-14.webp', alt:'Wyniki Graphene Carnuba Polish banner: perfection from every angle' },
+      { thumb:'images/banner/banner-15-thumb.webp', full:'images/banner/banner-15.webp', alt:'Banner with five men in shirts in front of a green wall' },
+      { thumb:'images/banner/banner-16-thumb.webp', full:'images/banner/banner-16.webp', alt:'Banner with a man and a woman in a dark office' },
+      { thumb:'images/banner/banner-17-thumb.webp', full:'images/banner/banner-17.webp', alt:'Banner of a man in a white shirt with a jacket over his shoulder against a green wall' },
+      { thumb:'images/banner/banner-18-thumb.webp', full:'images/banner/banner-18.webp', alt:'Banner of a man sitting in an armchair on a giant chessboard' },
+      { thumb:'images/banner/banner-19-thumb.webp', full:'images/banner/banner-19.webp', alt:'SONIORO jewellery banner: Adorn Yourself With Elegance, heart ring and opal pendant on red' },
+      { thumb:'images/banner/banner-20-thumb.webp', full:'images/banner/banner-20.webp', alt:'SONIORO jewellery banner: Elegance In Every Sparkle gold earrings on a dark flower' },
+      { thumb:'images/banner/banner-21-thumb.webp', full:'images/banner/banner-21.webp', alt:'SONIORO jewellery banner: Beauty Beyond Trends necklace, earrings and ring on green velvet' },
+      { thumb:'images/banner/banner-22-thumb.webp', full:'images/banner/banner-22.webp', alt:'SONIORO jewellery banner: Luxury In Every Detail necklace and lotus earrings on maroon' },
+      { thumb:'images/banner/banner-23-thumb.webp', full:'images/banner/banner-23.webp', alt:'SONIORO jewellery banner: Designed For Everyday Grace pearl earrings and butterfly necklace on navy' },
+      { thumb:'images/banner/banner-24-thumb.webp', full:'images/banner/banner-24.webp', alt:'Sneandals launch banner: Born Out Of The Human Obsession To Combine Things' },
+      { thumb:'images/banner/banner-25-thumb.webp', full:'images/banner/banner-25.webp', alt:'Red Chief Red Rush Sale banner: up to 55% off boots and loafers' },
+      { thumb:'images/banner/banner-26-thumb.webp', full:'images/banner/banner-26.webp', alt:'Khadi Natural SPF 50 sunscreen banner: Glow Ready For Every Sunny Day' },
+      { thumb:'images/banner/banner-27-thumb.webp', full:'images/banner/banner-27.webp', alt:'Foxtale 2-in-1 Pore Clarifying Swirl Mask new launch banner' },
+      { thumb:'images/banner/banner-28-thumb.webp', full:'images/banner/banner-28.webp', alt:'Foxtale skincare banner: up to 20% off with code GLOW20' },
+      { thumb:'images/banner/banner-29-thumb.webp', full:'images/banner/banner-29.webp', alt:'Eazy Walk sneakers banner: Go Light, Stay Casual' },
+      { thumb:'images/banner/banner-30-thumb.webp', full:'images/banner/banner-30.webp', alt:'Sneakers banner: Where Fashion Hits The Street' }
+    ],
+    poster: [
+      { thumb:'images/poster/poster-1-thumb.webp', full:'images/poster/poster-1.webp', alt:'Vikalp by Ipas Development Foundation poster: a couple with their baby and a Hindi headline' },
+      { thumb:'images/poster/poster-2-thumb.webp', full:'images/poster/poster-2.webp', alt:'ZuvaLife poster: Navarasa Workshop for Seniors' },
+      { thumb:'images/poster/poster-3-thumb.webp', full:'images/poster/poster-3.webp', alt:'Vikalp by Ipas Development Foundation poster: a doctor speaking with a couple, Hindi headline' },
+      { thumb:'images/poster/poster-4-thumb.webp', full:'images/poster/poster-4.webp', alt:'Burger King poster: the burger you deserve' },
+      { thumb:'images/poster/poster-5-thumb.webp', full:'images/poster/poster-5.webp', alt:'F1 poster: Charles Leclerc with a Ferrari car' },
+      { thumb:'images/poster/poster-6-thumb.webp', full:'images/poster/poster-6.webp', alt:'Venom movie poster' },
+      { thumb:'images/poster/poster-7-thumb.webp', full:'images/poster/poster-7.webp', alt:'Desi Flame poster: the taste of Bihar in every bite' },
+      { thumb:'images/poster/poster-8-thumb.webp', full:'images/poster/poster-8.webp', alt:'Poster of Cristiano Ronaldo and Lionel Messi in gold tones' },
+      { thumb:'images/poster/poster-9-thumb.webp', full:'images/poster/poster-9.webp', alt:'Erba poster: a spread of luxury and elegance' }
+    ],
+    logo: [
+      { thumb:'images/logo/logo-1-thumb.webp', full:'images/logo/logo-1.webp', alt:'Dufter logo on a dark blue background' },
+      { thumb:'images/logo/logo-2-thumb.webp', full:'images/logo/logo-2.webp', alt:'Coursework logo: help since 2007' },
+      { thumb:'images/logo/logo-3-thumb.webp', full:'images/logo/logo-3.webp', alt:'SicarioAds logo in chrome letters on a dark wall' },
+      { thumb:'images/logo/logo-4-thumb.webp', full:'images/logo/logo-4.webp', alt:'WriteMyAssignment.io logo on a dark background' }
+    ],
+    infographic: [
+      { thumb:'images/infographic/infographic-1-thumb.webp', full:'images/infographic/infographic-1.webp', alt:'Arborea Glow Boost Shower Gel: everyday cleansing, naturally enhanced' },
+      { thumb:'images/infographic/infographic-2-thumb.webp', full:'images/infographic/infographic-2.webp', alt:'Ayurvidha Pathriyog Stoneyog: natural kidney support infographic' },
+      { thumb:'images/infographic/infographic-3-thumb.webp', full:'images/infographic/infographic-3.webp', alt:'Effora infographic: waterproof design, shower-safe and easy to rinse' },
+      { thumb:'images/infographic/infographic-4-thumb.webp', full:'images/infographic/infographic-4.webp', alt:'Arborea Creamy Radiance Face Wash infographic' },
+      { thumb:'images/infographic/infographic-5-thumb.webp', full:'images/infographic/infographic-5.webp', alt:'Gamepad controller social media post: the fastest ever' },
+      { thumb:'images/infographic/infographic-6-thumb.webp', full:'images/infographic/infographic-6.webp', alt:'Vivyra Sticky Eyeliner: the art of luxury liner' },
+      { thumb:'images/infographic/infographic-7-thumb.webp', full:'images/infographic/infographic-7.webp', alt:'Igru Farms Jamun Honey: bold by nature' },
+      { thumb:'images/infographic/infographic-8-thumb.webp', full:'images/infographic/infographic-8.webp', alt:'Igru Farms Jamun Honey: deep, bold, naturally powerful' },
+      { thumb:'images/infographic/infographic-9-thumb.webp', full:'images/infographic/infographic-9.webp', alt:'Effora infographic: sonic vibration for a deeper clean' },
+      { thumb:'images/infographic/infographic-10-thumb.webp', full:'images/infographic/infographic-10.webp', alt:'Anokha Black Mustard Oil: pure health, pure taste, pure goodness' }
+    ],
+    'web-design': [
+      { thumb:'images/web-design/web-design-1-thumb.webp', full:'images/web-design/web-design-1.webp', alt:'Dufter clothing store website design: home page with a black theme' },
+      { thumb:'images/web-design/web-design-2-thumb.webp', full:'images/web-design/web-design-2.webp', alt:'Effora scalp massager and beauty devices website design: home page with a Monsoon Sale banner' },
+      { thumb:'images/web-design/web-design-3-thumb.webp', full:'images/web-design/web-design-3.webp', alt:'Humuss Beauty vegan skincare website design: home page with a Humidity Steal Your Glow banner' },
+      { thumb:'images/web-design/web-design-4-thumb.webp', full:'images/web-design/web-design-4.webp', alt:"Neeman's shoes website design: home page with the Sneandals launch banner" },
+      { thumb:'images/web-design/web-design-5-thumb.webp', full:'images/web-design/web-design-5.webp', alt:'SONIORO jewellery website design: home page with a Luxury In Every Detail banner' },
+      { thumb:'images/web-design/web-design-6-thumb.webp', full:'images/web-design/web-design-6.webp', alt:'The Meme House streetwear website design: home page with the TMH Originals banner' },
+      { thumb:'images/web-design/web-design-7-thumb.webp', full:'images/web-design/web-design-7.webp', alt:'Five Star Remodeling website design: home page for Wichita home remodeling services' },
+      { thumb:'images/web-design/web-design-8-thumb.webp', full:'images/web-design/web-design-8.webp', alt:'Vivyra Beauty makeup tools website design: home page with a Crafted by a makeup coach banner' }
+    ],
+    creative: [
+      { thumb:'images/creative/creative-1-thumb.webp', full:'images/creative/creative-1.webp', alt:'Boult Audio earbuds creative on a grey podium' },
+      { thumb:'images/creative/creative-2-thumb.webp', full:'images/creative/creative-2.webp', alt:'Vivyra Sticky Eyeliner creative in a dark mountain landscape' },
+      { thumb:'images/creative/creative-3-thumb.webp', full:'images/creative/creative-3.webp', alt:'Brown leather laptop bag on a stone pedestal' },
+      { thumb:'images/creative/creative-4-thumb.webp', full:'images/creative/creative-4.webp', alt:'Wyniki Graphene Carnuba Polish bottle in a dark garage' },
+      { thumb:'images/creative/creative-5-thumb.webp', full:'images/creative/creative-5.webp', alt:'Effora facial cleansing brush on a purple podium' }
+    ]
+  };
+
+  // Per-gallery options. scroll:true = the click view shows a very tall image (a whole web page) at a readable
+  // width and lets you scroll it, instead of shrinking it to fit the screen.
+  const GALLERY_OPTIONS = {
+    'web-design': { scroll:true }
+  };
+  preview.style.setProperty('--slide-move', SLIDE_MOVE+'ms');
+
+  const galleryState = {};        // key -> { track, slides, idx }
+  let activeKey = null, slideTimer = null;
+
+  function buildGallery(key){
+    if(galleryState[key]) return galleryState[key];
+    const items = GALLERIES[key];
+    if(!items || !items.length) return null;
+    const track = document.createElement('div');
+    track.className = 'preview-track';
+    const slides = items.map(it=>{
+      const slide = document.createElement('div');
+      slide.className = 'slide';
+      const img = new Image();
+      img.src = it.thumb; img.alt = ''; img.draggable = false; img.decoding = 'async';
+      slide.appendChild(img);
+      track.appendChild(slide);
+      return slide;
+    });
+    preview.appendChild(track);
+    return (galleryState[key] = { track, slides, idx:0 });
+  }
+
+  function resetGallery(g){
+    g.slides.forEach((sl,i)=>{
+      sl.classList.add('no-anim');
+      sl.classList.remove('is-current','is-leaving');
+      if(i === 0) sl.classList.add('is-current');
+    });
+    void g.track.offsetWidth;                     // apply the reset without animating it
+    g.slides.forEach(sl=>sl.classList.remove('no-anim'));
+    g.idx = 0;
+  }
+
+  function slideTo(g, n){
+    const cur = g.slides[g.idx], nxt = g.slides[n];
+    nxt.classList.add('no-anim');                 // park the next banner on the right...
+    nxt.classList.remove('is-leaving','is-current');
+    void nxt.offsetWidth;
+    nxt.classList.remove('no-anim');
+    cur.classList.remove('is-current');           // ...then slide current out to the left, next in
+    cur.classList.add('is-leaving');
+    nxt.classList.add('is-current');
+    g.idx = n;
+  }
+
+  function scheduleNext(g, wait){
+    slideTimer = setTimeout(()=>{
+      slideTo(g, (g.idx + 1) % g.slides.length);
+      scheduleNext(g, SLIDE_HOLD + SLIDE_MOVE);   // hold time counts from when the slide has landed
+    }, wait);
+  }
+
+  function startGallery(key){
+    const g = buildGallery(key);
+    if(!g) return;
+    stopGallery();
+    activeKey = key;
+    preview.dataset.gallery = key;
+    preview.classList.add('gallery');
+    g.track.classList.add('on');
+    resetGallery(g);                              // always starts from the first banner
+    if(g.slides.length > 1) scheduleNext(g, SLIDE_HOLD);
+  }
+  function pauseGallery(){ clearTimeout(slideTimer); slideTimer = null; }   // keeps the box content while it fades out
+  function stopGallery(){
+    pauseGallery();
+    if(activeKey && galleryState[activeKey]) galleryState[activeKey].track.classList.remove('on');
+    activeKey = null;
+    preview.classList.remove('gallery');
+    delete preview.dataset.gallery;
+  }
+
+  if(!isTouch){
+    rows.forEach(row=>{
+      row.addEventListener('mouseenter', ()=>{
+        workList.classList.add('hovering');
+        if(row.dataset.gallery){
+          startGallery(row.dataset.gallery);
+        } else {
+          stopGallery();
+          swatch.style.background = patterns[row.dataset.preview];
+        }
+        preview.classList.add('active');
+      });
+      row.addEventListener('mouseleave', ()=>{
+        workList.classList.remove('hovering');
+        preview.classList.remove('active');
+        pauseGallery();
+      });
+      row.addEventListener('mousemove', e=>{
+        preview.style.left = e.clientX+'px';
+        preview.style.top = e.clientY+'px';
+      });
+    });
+
+    // load the small hover images a little before the Work section scrolls into view —
+    // staggered one gallery at a time (via idle time) instead of firing all of them at once,
+    // so it doesn't create one big burst of requests that slows the page down.
+    new IntersectionObserver((entries, obs)=>{
+      if(entries.some(e=>e.isIntersecting)){
+        const keys = Object.keys(GALLERIES);
+        let i = 0;
+        const loadNext = () => {
+          if(i >= keys.length) return;
+          buildGallery(keys[i++]);
+          (window.requestIdleCallback || setTimeout)(loadNext, 200);
+        };
+        loadNext();
+        obs.disconnect();
+      }
+    }, {rootMargin:'150px'}).observe(document.getElementById('work'));
+  }
+
+  // ---------- lightbox ----------
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCount = document.getElementById('lbCount');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  const lbFigure = lb.querySelector('.lb-figure');
+  let lbKey = null, lbIdx = 0, lbToken = 0, lbReturnFocus = null;
+  const pad = n => String(n).padStart(2,'0');
+
+  function showInLightbox(i){
+    const items = GALLERIES[lbKey];
+    lbIdx = (i + items.length) % items.length;
+    const it = items[lbIdx], token = ++lbToken;
+    lbCount.textContent = pad(lbIdx+1) + ' / ' + pad(items.length);
+    lbImg.classList.add('swap');
+    const big = new Image();
+    big.onload = big.onerror = ()=>{
+      if(token !== lbToken) return;               // user already moved on
+      lbImg.src = it.full; lbImg.alt = it.alt || '';
+      lbFigure.scrollTop = 0;                     // tall images always start at the top
+      lbImg.classList.remove('swap');
+      if(items.length > 1){ new Image().src = items[(lbIdx+1) % items.length].full; }   // warm up the next one
+    };
+    big.src = it.full;
+  }
+
+  function openLightbox(key, i, byKeyboard){
+    lbKey = key;
+    pauseGallery();
+    workList.classList.remove('hovering');
+    preview.classList.remove('active');
+    lbReturnFocus = byKeyboard ? document.activeElement : null;
+    const many = GALLERIES[key].length > 1;
+    lbPrev.hidden = lbNext.hidden = !many;
+    lb.classList.toggle('scroll', !!(GALLERY_OPTIONS[key] && GALLERY_OPTIONS[key].scroll));
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow = 'hidden';
+    lbClose.focus({preventScroll:true});
+    showInLightbox(i);
+  }
+  function closeLightbox(){
+    lbToken++;
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow = '';
+    if(lbReturnFocus){ lbReturnFocus.focus({preventScroll:true}); lbReturnFocus = null; }
+  }
+
+  rows.forEach(row=>{
+    const key = row.dataset.gallery;
+    if(!key || !GALLERIES[key]) return;
+    row.tabIndex = 0;
+    row.setAttribute('role','button');
+    row.addEventListener('click', ()=>{
+      // open exactly the banner that is on screen in the hover box right now
+      const g = galleryState[key];
+      const showing = g && activeKey === key && row.matches(':hover');
+      openLightbox(key, showing ? g.idx : 0, false);
+    });
+    row.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(key, 0, true); }
+    });
+  });
+
+  lb.addEventListener('click', e=>{
+    if(e.target.closest('.lb-prev, .lb-next')) return;
+    if(lb.classList.contains('scroll') && e.target.closest('.lb-figure')) return;   // scrolling a tall page must not close it
+    closeLightbox();
+  });
+  lbPrev.addEventListener('click', ()=>showInLightbox(lbIdx-1));
+  lbNext.addEventListener('click', ()=>showInLightbox(lbIdx+1));
+  document.addEventListener('keydown', e=>{
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    else if(e.key === 'ArrowLeft') showInLightbox(lbIdx-1);
+    else if(e.key === 'ArrowRight') showInLightbox(lbIdx+1);
+    else if(lb.classList.contains('scroll') && (e.key === 'ArrowDown' || e.key === 'PageDown')){ e.preventDefault(); lbFigure.scrollBy({top: innerHeight*.6, behavior:'smooth'}); }
+    else if(lb.classList.contains('scroll') && (e.key === 'ArrowUp' || e.key === 'PageUp')){ e.preventDefault(); lbFigure.scrollBy({top: -innerHeight*.6, behavior:'smooth'}); }
+    else if(e.key === 'Tab'){
+      e.preventDefault();
+      const f = [lbClose, lbPrev, lbNext].filter(b=>!b.hidden);
+      const at = f.indexOf(document.activeElement);
+      f[(at + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+    }
+  });
+
+  // scroll reveal
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
